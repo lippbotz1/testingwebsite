@@ -351,18 +351,16 @@
           <div class="support-native-card">
             <div class="support-native-icon" aria-hidden="true">♥</div>
             <h3>Dukung Lyppe melalui SociaBuzz</h3>
-            <p>Tekan tombol di bawah untuk membuka halaman dukungan resmi Lyppe di SociaBuzz.</p>
-            <a class="action-btn support-open-link" href="https://sociabuzz.com/_alippe/support" target="_blank" rel="noopener noreferrer">
-              Buka Halaman Dukungan
-            </a>
-            <p class="support-native-note">Halaman pembayaran SociaBuzz dibuka di tab baru karena situs tersebut tidak mengizinkan checkout ditampilkan melalui iframe.</p>
+            <p>Tekan tombol di bawah untuk membuka halaman dukungan SociaBuzz resmi milik Lyppe.</p>
+            <a class="action-btn support-open-link" href="https://sociabuzz.com/_alippe/support" target="_blank" rel="noopener noreferrer">Buka SociaBuzz Support</a>
+            <p class="support-native-note">SociaBuzz tidak mengizinkan halaman dukungannya ditampilkan langsung di dalam iframe website ini.</p>
           </div>
           <style>
             .support-native-card{padding:24px 18px;text-align:center;border:1px solid var(--border);border-radius:16px;background:linear-gradient(145deg,rgba(59,130,246,.12),rgba(17,17,26,.95));}
             .support-native-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 14px;border-radius:16px;background:rgba(59,130,246,.18);color:var(--accent-2);font-size:27px}
             .support-native-card h3{margin:0 0 9px;color:var(--text);font-size:19px}
             .support-native-card p{max-width:480px;margin:0 auto 16px;color:var(--text-dim);font-size:13px;line-height:1.7}
-            .support-native-card .support-open-link{max-width:320px;cursor:pointer;border:0;text-decoration:none;}
+            .support-native-card .support-open-link{display:flex;align-items:center;justify-content:center;max-width:320px;margin:0 auto;cursor:pointer;border:0;text-decoration:none}
             .support-native-card .support-native-note{margin:15px auto 0;font-size:11px}
           </style>        </div>
       </div>
@@ -577,8 +575,6 @@ document.querySelectorAll('.action-btn[data-copy]').forEach(function(btn) {
   });
 });
 
-
-
 /* DOWNLOAD */
 document.getElementById('dl-qris').addEventListener('click', async function() {
   const img = document.getElementById('qris-img');
@@ -631,5 +627,14 @@ document.getElementById('dl-qris').addEventListener('click', async function() {
   }, 2200);
 });
 </script>
+
+<!-- Official SociaBuzz Website/Blog Support Button -->
+<script type="text/javascript" src="https://storage.sociabuzz.com/storage/js/main/buttononwebsite/index.min.js"></script>
+<script>
+  if (window.sbBoW && typeof window.sbBoW.draw === 'function') {
+    window.sbBoW.draw("_alippe", "QmVyaSBEdWt1bmdhbg==", "position-bottom-right", "#76CC11", "#FFFFFF");
+  }
+</script>
+
 </body>
 </html>
