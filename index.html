@@ -337,7 +337,7 @@
 
     <!-- SUPPORT SICIABUZZ -->
     <div class="pay-item">
-      <button class="pay-btn support-btn" data-target="hero-support">
+      <button class="pay-btn support-btn" id="open-support-modal" type="button">
         <div class="ico">
           <svg viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H5v-2a7 7 0 1 1 14 0v2h-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1v1a2 2 0 0 1-2 2h-3a1 1 0 0 0 0 2h3a4 4 0 0 0 4-4V10a9 9 0 0 0-9-9z"/></svg>
         </div>
@@ -346,24 +346,6 @@
           <span class="desc">Hubungi kami untuk bantuan</span>
         </div>
       </button>
-      <div class="pay-hero" id="hero-support">
-        <div class="hero-inner">
-          <div class="support-native-card">
-            <div class="support-native-icon" aria-hidden="true">♥</div>
-            <h3>Dukung Lyppe melalui SociaBuzz</h3>
-            <p>Tekan tombol di bawah untuk membuka halaman dukungan SociaBuzz resmi milik Lyppe.</p>
-            <a class="action-btn support-open-link" href="https://sociabuzz.com/_alippe/support" target="_blank" rel="noopener noreferrer">Buka SociaBuzz Support</a>
-            <p class="support-native-note">SociaBuzz tidak mengizinkan halaman dukungannya ditampilkan langsung di dalam iframe website ini.</p>
-          </div>
-          <style>
-            .support-native-card{padding:24px 18px;text-align:center;border:1px solid var(--border);border-radius:16px;background:linear-gradient(145deg,rgba(59,130,246,.12),rgba(17,17,26,.95));}
-            .support-native-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 14px;border-radius:16px;background:rgba(59,130,246,.18);color:var(--accent-2);font-size:27px}
-            .support-native-card h3{margin:0 0 9px;color:var(--text);font-size:19px}
-            .support-native-card p{max-width:480px;margin:0 auto 16px;color:var(--text-dim);font-size:13px;line-height:1.7}
-            .support-native-card .support-open-link{display:flex;align-items:center;justify-content:center;max-width:320px;margin:0 auto;cursor:pointer;border:0;text-decoration:none}
-            .support-native-card .support-native-note{margin:15px auto 0;font-size:11px}
-          </style>        </div>
-      </div>
     </div>
 
     <!-- QRIS -->
@@ -634,6 +616,47 @@ document.getElementById('dl-qris').addEventListener('click', async function() {
   if (window.sbBoW && typeof window.sbBoW.draw === 'function') {
     window.sbBoW.draw("_alippe", "QmVyaSBEdWt1bmdhbg==", "position-bottom-right", "#76CC11", "#FFFFFF");
   }
+</script>
+
+
+<!-- SociaBuzz support modal: keeps the visitor on Lyppe Payment until they choose to open SociaBuzz -->
+<div class="support-modal" id="support-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="support-modal-title">
+  <div class="support-modal-backdrop" data-close-support="true"></div>
+  <div class="support-modal-card" role="document">
+    <button class="support-modal-close" type="button" aria-label="Tutup" data-close-support="true">&times;</button>
+    <div class="support-modal-icon" aria-hidden="true">♥</div>
+    <h2 id="support-modal-title">Dukung Lyppe melalui SociaBuzz</h2>
+    <p>Lu tetap berada di website Lyppe Payment. Untuk keamanan pembayaran, halaman checkout SociaBuzz dibuka setelah lu menekan tombol di bawah.</p>
+    <a class="action-btn support-modal-open-link" href="https://sociabuzz.com/_alippe/support" target="_blank" rel="noopener noreferrer">Lanjut ke SociaBuzz</a>
+    <p class="support-modal-note">SociaBuzz saat ini menolak ditampilkan di dalam iframe, jadi formulir pembayarannya belum bisa dimuat langsung di modal ini.</p>
+  </div>
+</div>
+<style>
+.support-modal{position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;padding:18px;}
+.support-modal.open{display:flex;}
+.support-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.76);backdrop-filter:blur(7px);}
+.support-modal-card{position:relative;z-index:1;width:min(100%,440px);padding:28px 20px 22px;border:1px solid var(--border);border-radius:22px;background:linear-gradient(145deg,#191c2b,#101016);box-shadow:0 24px 80px rgba(0,0,0,.55);text-align:center;animation:supportModalIn .18s ease-out;}
+.support-modal-close{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:12px;background:rgba(255,255,255,.08);color:var(--text);font-size:27px;line-height:1;cursor:pointer;}
+.support-modal-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 15px;border-radius:18px;background:rgba(59,130,246,.18);color:var(--accent-2);font-size:29px;}
+.support-modal-card h2{margin:0 26px 10px;color:var(--text);font-size:21px;}
+.support-modal-card p{margin:0 auto 17px;color:var(--text-dim);font-size:13px;line-height:1.7;max-width:360px;}
+.support-modal-card .support-modal-open-link{display:flex;justify-content:center;align-items:center;width:100%;max-width:320px;margin:0 auto 16px;text-decoration:none;}
+.support-modal-card .support-modal-note{font-size:11px;margin-bottom:0;}
+body.support-modal-lock{overflow:hidden;}
+@keyframes supportModalIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.support-modal-card{animation:none}}
+</style>
+<script>
+(function(){
+ const modal=document.getElementById('support-modal');
+ const opener=document.getElementById('open-support-modal');
+ if(!modal||!opener)return;
+ function openModal(){modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.classList.add('support-modal-lock');const close=modal.querySelector('.support-modal-close');if(close)close.focus();}
+ function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.classList.remove('support-modal-lock');opener.focus();}
+ opener.addEventListener('click',openModal);
+ modal.querySelectorAll('[data-close-support="true"]').forEach(el=>el.addEventListener('click',closeModal));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
+})();
 </script>
 
 </body>
