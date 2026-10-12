@@ -33,7 +33,6 @@
     overflow-x: hidden;
     touch-action: pan-x pan-y;
     -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     padding-bottom: 40px;
@@ -98,7 +97,6 @@
     display: block;
   }
 
-  /* SECTION TITLE */
   .section-title {
     font-size: 13px;
     font-weight: 600;
@@ -109,7 +107,6 @@
     padding-left: 4px;
   }
 
-  /* STACK */
   .pay-stack {
     display: flex;
     flex-direction: column;
@@ -182,7 +179,7 @@
   }
   .pay-btn.active .info .desc { color: var(--accent-2); }
 
-  /* Support button — tampil beda sedikit biar stand out */
+  /* Support button */
   .pay-btn.support-btn .ico {
     background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(37,99,235,0.15));
     border: 1px solid rgba(59,130,246,0.3);
@@ -202,10 +199,6 @@
     max-height: 1400px;
     opacity: 1;
     padding: 10px 0 0;
-  }
-  /* Support hero lebih tinggi karena ada iframe */
-  .pay-hero#hero-support.active {
-    max-height: 2000px;
   }
 
   .hero-inner {
@@ -288,9 +281,6 @@
     transition: all 0.2s ease;
     font-family: inherit;
     box-shadow: 0 4px 16px rgba(59,130,246,0.3);
-    -webkit-user-select: none;
-    user-select: none;
-    text-decoration: none;
   }
   .action-btn:hover {
     background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%);
@@ -310,65 +300,19 @@
     box-shadow: 0 4px 16px rgba(34,197,94,0.3);
   }
 
-  /* ===== SUPPORT IFRAME ===== */
+  /* Support iframe */
   .support-frame-wrap {
-    background: #fff;
     border-radius: var(--radius-sm);
     overflow: hidden;
-    margin-bottom: 12px;
-    position: relative;
-    min-height: 400px;
+    background: #0e0e14;
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
   .support-frame-wrap iframe {
     width: 100%;
-    height: 500px;
+    height: 380px;
     border: 0;
     display: block;
-    background: #fff;
-  }
-  /* Loading state */
-  .support-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-    color: #666;
-    font-size: 13px;
-    font-weight: 500;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  .support-loading.hidden { opacity: 0; }
-
-  /* Fallback kalau iframe diblokir */
-  .support-fallback {
-    display: none;
-    padding: 24px 16px;
-    text-align: center;
-    color: #333;
-    background: #fff;
-  }
-  .support-fallback.show { display: block; }
-  .support-fallback p {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 14px;
-    line-height: 1.5;
-  }
-  .support-fallback a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--accent);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 100px;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
+    background: #0e0e14;
   }
 
   @media (max-width: 420px) {
@@ -379,7 +323,7 @@
     .pay-btn .ico { width: 36px; height: 36px; }
     .hero-inner { padding: 14px; }
     .qr-wrap { max-width: 170px; }
-    .support-frame-wrap iframe { height: 460px; }
+    .support-frame-wrap iframe { height: 360px; }
   }
 </style>
 </head>
@@ -407,7 +351,7 @@
 
   <div class="pay-stack">
 
-    <!-- SUPPORT SICIABUZZ (PALING ATAS) -->
+    <!-- SUPPORT SICIABUZZ -->
     <div class="pay-item">
       <button class="pay-btn support-btn" data-target="hero-support">
         <div class="ico">
@@ -421,22 +365,7 @@
       <div class="pay-hero" id="hero-support">
         <div class="hero-inner">
           <div class="support-frame-wrap">
-            <div class="support-loading" id="support-loading">Memuat halaman support...</div>
-            <!-- GANTI src dengan link support kamu -->
-            <iframe
-              id="support-frame"
-              src="https://sociabuzz.com/_alippe/tribe"
-              title="Support Siciabuzz"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              allow="clipboard-write; encrypted-media"
-            ></iframe>
-            <div class="support-fallback" id="support-fallback">
-              <p>Halaman support tidak bisa ditampilkan di sini.<br>Klik tombol di bawah untuk membukanya.</p>
-              <a id="support-open-link" href="https://sociabuzz.com/_alippe/tribe" target="_blank" rel="noopener">
-                Buka Halaman Support
-              </a>
-            </div>
+            <iframe src="support.html" title="Support Siciabuzz" loading="lazy"></iframe>
           </div>
         </div>
       </div>
@@ -563,41 +492,25 @@
 </div>
 
 <script>
-/* ============================================
-   1. ANTI ZOOM
-   ============================================ */
-document.addEventListener('wheel', function(e) {
-  if (e.ctrlKey) e.preventDefault();
-}, { passive: false });
-
+/* ANTI ZOOM */
+document.addEventListener('wheel', function(e) { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
 document.addEventListener('keydown', function(e) {
-  if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
-    e.preventDefault();
-    return false;
-  }
+  if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) { e.preventDefault(); return false; }
   if (e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) e.preventDefault();
 });
-
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(function(evt) {
   document.addEventListener(evt, function(e) { e.preventDefault(); }, { passive: false });
 });
-
 let lastTouchEnd = 0;
 document.addEventListener('touchend', function(e) {
   const now = Date.now();
   if (now - lastTouchEnd <= 300) e.preventDefault();
   lastTouchEnd = now;
 }, { passive: false });
+document.addEventListener('touchmove', function(e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
 
-document.addEventListener('touchmove', function(e) {
-  if (e.touches.length > 1) e.preventDefault();
-}, { passive: false });
-
-
-/* ============================================
-   2. TOGGLE PANEL
-   ============================================ */
-document.querySelectorAll('.pay-btn').forEach(function(btn) {
+/* TOGGLE PANEL */
+document.querySelectorAll('.pay-btn[data-target]').forEach(function(btn) {
   btn.addEventListener('click', function() {
     const targetId = btn.dataset.target;
     const target = document.getElementById(targetId);
@@ -609,85 +522,17 @@ document.querySelectorAll('.pay-btn').forEach(function(btn) {
     if (!isOpen) {
       btn.classList.add('active');
       target.classList.add('active');
-      // Kalau support, cek iframe berhasil load atau gak
-      if (targetId === 'hero-support') {
-        checkSupportFrame();
-      }
     }
   });
 });
 
-
-/* ============================================
-   3. SUPPORT IFRAME — loading & fallback
-   ============================================ */
-let supportChecked = false;
-function checkSupportFrame() {
-  if (supportChecked) return;
-  supportChecked = true;
-
-  const iframe = document.getElementById('support-frame');
-  const loading = document.getElementById('support-loading');
-  const fallback = document.getElementById('support-fallback');
-
-  // Sembunyikan loading setelah 2 detik (iframe selesai render)
-  const hideLoading = function() {
-    loading.classList.add('hidden');
-  };
-
-  iframe.addEventListener('load', function() {
-    setTimeout(hideLoading, 400);
-
-    // Cek apakah iframe berhasil render konten
-    // Kalau X-Frame-Options blokir, biasanya body kosong / iframe gak bisa diakses
-    try {
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
-      if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
-        // Kemungkinan diblokir
-        loading.style.display = 'none';
-        fallback.classList.add('show');
-      }
-    } catch (e) {
-      // Cross-origin — normal, gak bisa diakses. Biarin aja, kemungkinan render OK
-    }
-  });
-
-  iframe.addEventListener('error', function() {
-    loading.style.display = 'none';
-    fallback.classList.add('show');
-  });
-
-  // Timeout: kalau 5 detik masih loading, tampilkan fallback
-  setTimeout(function() {
-    if (!loading.classList.contains('hidden')) {
-      // Cek lagi — kalau masih ada, mungkin diblokir
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
-          loading.style.display = 'none';
-          fallback.classList.add('show');
-        }
-      } catch (e) {
-        // Cross-origin, anggap OK
-        hideLoading();
-      }
-    }
-  }, 5000);
-}
-
-
-/* ============================================
-   4. TOMBOL COPY
-   ============================================ */
+/* COPY */
 function copyToClipboard(text) {
   if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text)
-      .then(function() { return true; })
-      .catch(function() { return fallbackCopy(text); });
+    return navigator.clipboard.writeText(text).then(function() { return true; }).catch(function() { return fallbackCopy(text); });
   }
   return Promise.resolve(fallbackCopy(text));
 }
-
 function fallbackCopy(text) {
   try {
     const ta = document.createElement('textarea');
@@ -698,14 +543,8 @@ function fallbackCopy(text) {
     ta.style.left = '0';
     ta.style.width = '1px';
     ta.style.height = '1px';
-    ta.style.padding = '0';
-    ta.style.border = 'none';
-    ta.style.outline = 'none';
-    ta.style.boxShadow = 'none';
-    ta.style.background = 'transparent';
     ta.style.opacity = '0';
     document.body.appendChild(ta);
-
     if (navigator.userAgent.match(/ipad|iphone/i)) {
       const range = document.createRange();
       range.selectNodeContents(ta);
@@ -716,20 +555,15 @@ function fallbackCopy(text) {
     } else {
       ta.select();
     }
-
     const ok = document.execCommand('copy');
     document.body.removeChild(ta);
     return ok;
-  } catch (e) {
-    return false;
-  }
+  } catch (e) { return false; }
 }
-
 document.querySelectorAll('.action-btn[data-copy]').forEach(function(btn) {
   btn.addEventListener('click', function() {
     const nomor = this.dataset.copy;
     const self = this;
-
     copyToClipboard(nomor).then(function(success) {
       const originalHTML = self.innerHTML;
       if (success) {
@@ -746,10 +580,7 @@ document.querySelectorAll('.action-btn[data-copy]').forEach(function(btn) {
   });
 });
 
-
-/* ============================================
-   5. TOMBOL DOWNLOAD
-   ============================================ */
+/* DOWNLOAD */
 document.getElementById('dl-qris').addEventListener('click', async function() {
   const img = document.getElementById('qris-img');
   const btn = this;
@@ -768,7 +599,6 @@ document.getElementById('dl-qris').addEventListener('click', async function() {
     a.remove();
     setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
   }
-
   function tryAnchorDownload() {
     const a = document.createElement('a');
     a.href = img.src;
@@ -779,10 +609,7 @@ document.getElementById('dl-qris').addEventListener('click', async function() {
     a.click();
     a.remove();
   }
-
-  function tryOpenInTab() {
-    window.open(img.src, '_blank');
-  }
+  function tryOpenInTab() { window.open(img.src, '_blank'); }
 
   try {
     await tryFetchDownload();
@@ -799,7 +626,6 @@ document.getElementById('dl-qris').addEventListener('click', async function() {
       btn.classList.add('success');
     }
   }
-
   setTimeout(function() {
     btn.innerHTML = originalHTML;
     btn.classList.remove('success');
