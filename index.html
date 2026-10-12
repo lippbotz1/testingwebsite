@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>Lyppe Payment</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0b0b10;
+    --panel: #17171e;
+    --panel-hover: #1d1d26;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.14);
+    --text: #fff;
+    --text-dim: #8b8b9e;
+    --text-soft: #c8c8d8;
+    --accent: #3b82f6;
+    --accent-2: #60a5fa;
+    --accent-deep: #2563eb;
+    --radius: 16px;
+    --radius-sm: 12px;
+  }
+
+  html, body {
+    min-height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+    overflow-x: hidden;
+    touch-action: pan-x pan-y;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom: 40px;
+  }
+
+  .wrapper {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 40px 18px 40px;
+  }
+
+  /* PROFILE */
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a2a35, #1a1a22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border: 2px solid var(--border-strong);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    display: block;
+  }
+
+  .name-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.4px;
+  }
+  .verified {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .verified svg {
+    width: 100%; height: 100%;
+    display: block;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+    padding-left: 4px;
+  }
+
+  /* STACK */
+  .pay-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pay-item { display: flex; flex-direction: column; }
+
+  /* Tombol */
+  .pay-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 15px 16px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+  }
+  .pay-btn:hover {
+    background: var(--panel-hover);
+    border-color: var(--border-strong);
+  }
+  .pay-btn.active {
+    background: var(--panel-hover);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+  }
+
+  .pay-btn .ico {
+    width: 38px; height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    transition: all 0.2s;
+  }
+  .pay-btn .ico svg {
+    width: 19px; height: 19px;
+    fill: var(--text-soft);
+    transition: fill 0.2s;
+  }
+  .pay-btn.active .ico {
+    background: rgba(59,130,246,0.18);
+  }
+  .pay-btn.active .ico svg { fill: var(--accent-2); }
+
+  .pay-btn .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .pay-btn .info .name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .pay-btn .info .desc {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+  .pay-btn.active .info .desc { color: var(--accent-2); }
+
+  /* Support button — tampil beda sedikit biar stand out */
+  .pay-btn.support-btn .ico {
+    background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(37,99,235,0.15));
+    border: 1px solid rgba(59,130,246,0.3);
+  }
+  .pay-btn.support-btn .ico svg { fill: var(--accent-2); }
+  .pay-btn.support-btn .info .desc { color: var(--accent-2); }
+
+  /* Hero */
+  .pay-hero {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+    padding: 0;
+  }
+  .pay-hero.active {
+    max-height: 1400px;
+    opacity: 1;
+    padding: 10px 0 0;
+  }
+  /* Support hero lebih tinggi karena ada iframe */
+  .pay-hero#hero-support.active {
+    max-height: 2000px;
+  }
+
+  .hero-inner {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+
+  /* QR */
+  .qr-wrap {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    max-width: 190px;
+    margin: 0 auto 14px;
+    overflow: hidden;
+  }
+  .qr-wrap img {
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+  }
+
+  /* Navbar rekening */
+  .rekening-nav {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .rekening-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 16px;
+  }
+  .rekening-row + .rekening-row {
+    border-top: 1px solid var(--border);
+  }
+  .rekening-row .label {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    flex-shrink: 0;
+  }
+  .rekening-row .value {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #fff;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rekening-row .value.nomor {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+  }
+
+  /* Action button */
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%);
+    border: none;
+    color: #fff;
+    padding: 13px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+    -webkit-user-select: none;
+    user-select: none;
+    text-decoration: none;
+  }
+  .action-btn:hover {
+    background: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 100%);
+    box-shadow: 0 6px 20px rgba(59,130,246,0.45);
+    transform: translateY(-1px);
+  }
+  .action-btn:active { transform: translateY(0); }
+  .action-btn svg {
+    width: 17px; height: 17px;
+    stroke: #fff; fill: none;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .action-btn.success {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    box-shadow: 0 4px 16px rgba(34,197,94,0.3);
+  }
+
+  /* ===== SUPPORT IFRAME ===== */
+  .support-frame-wrap {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+    min-height: 400px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .support-frame-wrap iframe {
+    width: 100%;
+    height: 500px;
+    border: 0;
+    display: block;
+    background: #fff;
+  }
+  /* Loading state */
+  .support-loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #666;
+    font-size: 13px;
+    font-weight: 500;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .support-loading.hidden { opacity: 0; }
+
+  /* Fallback kalau iframe diblokir */
+  .support-fallback {
+    display: none;
+    padding: 24px 16px;
+    text-align: center;
+    color: #333;
+    background: #fff;
+  }
+  .support-fallback.show { display: block; }
+  .support-fallback p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+  .support-fallback a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  @media (max-width: 420px) {
+    .wrapper { padding: 30px 14px 40px; }
+    .avatar { width: 84px; height: 84px; }
+    .name { font-size: 18px; }
+    .pay-btn { padding: 14px 14px; gap: 12px; }
+    .pay-btn .ico { width: 36px; height: 36px; }
+    .hero-inner { padding: 14px; }
+    .qr-wrap { max-width: 170px; }
+    .support-frame-wrap iframe { height: 460px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- PROFILE -->
+  <div class="profile">
+    <div class="avatar">
+      <img src="https://cdn.nekohime.site/file/yzoyqbcw.jpeg" alt="Lyppe Payment" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'font-size:32px;font-weight:800;color:#8b8b9e\'>LP</span>'">
+    </div>
+    <div class="name-row">
+      <span class="name">Lyppe Payment</span>
+      <span class="verified">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#1d9bf0" d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.26 3.91.81c.67 1.31 1.91 2.19 3.34 2.19s2.68-.88 3.34-2.19c1.39.45 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"/>
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <!-- SECTION -->
+  <div class="section-title">Metode Pembayaran</div>
+
+  <div class="pay-stack">
+
+    <!-- SUPPORT SICIABUZZ (PALING ATAS) -->
+    <div class="pay-item">
+      <button class="pay-btn support-btn" data-target="hero-support">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H5v-2a7 7 0 1 1 14 0v2h-2a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1v1a2 2 0 0 1-2 2h-3a1 1 0 0 0 0 2h3a4 4 0 0 0 4-4V10a9 9 0 0 0-9-9z"/></svg>
+        </div>
+        <div class="info">
+          <span class="name">Support Siciabuzz</span>
+          <span class="desc">Hubungi kami untuk bantuan</span>
+        </div>
+      </button>
+      <div class="pay-hero" id="hero-support">
+        <div class="hero-inner">
+          <div class="support-frame-wrap">
+            <div class="support-loading" id="support-loading">Memuat halaman support...</div>
+            <!-- GANTI src dengan link support kamu -->
+            <iframe
+              id="support-frame"
+              src="https://sociabuzz.com/_alippe/tribe"
+              title="Support Siciabuzz"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allow="clipboard-write; encrypted-media"
+            ></iframe>
+            <div class="support-fallback" id="support-fallback">
+              <p>Halaman support tidak bisa ditampilkan di sini.<br>Klik tombol di bawah untuk membukanya.</p>
+              <a id="support-open-link" href="https://sociabuzz.com/_alippe/tribe" target="_blank" rel="noopener">
+                Buka Halaman Support
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QRIS -->
+    <div class="pay-item">
+      <button class="pay-btn" data-target="hero-qris">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm11-2h2v2h-2v-2zm3 0h2v2h-2v-2zm-3 3h2v2h-2v-2zm3 0h2v2h-2v-2zm-3 3h2v2h-2v-2zm3 0h2v2h-2v-2z"/></svg>
+        </div>
+        <div class="info">
+          <span class="name">QRIS</span>
+          <span class="desc">Scan untuk semua bank & e-wallet</span>
+        </div>
+      </button>
+      <div class="pay-hero" id="hero-qris">
+        <div class="hero-inner">
+          <div class="qr-wrap">
+            <img id="qris-img" src="https://cdn.nekohime.site/file/e1ybu3j4.jpeg" alt="QRIS Lyppe Payment" crossorigin="anonymous">
+          </div>
+          <button class="action-btn" id="dl-qris">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download Gambar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DANA -->
+    <div class="pay-item">
+      <button class="pay-btn" data-target="hero-dana">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 14H4V6h16v12zM6 9h12v2H6V9zm0 4h8v2H6v-2z"/></svg>
+        </div>
+        <div class="info">
+          <span class="name">DANA</span>
+          <span class="desc">Transfer ke nomor DANA</span>
+        </div>
+      </button>
+      <div class="pay-hero" id="hero-dana">
+        <div class="hero-inner">
+          <div class="rekening-nav">
+            <div class="rekening-row">
+              <span class="label">Nama</span>
+              <span class="value">SUK****</span>
+            </div>
+            <div class="rekening-row">
+              <span class="label">Nomor</span>
+              <span class="value nomor">083153255281</span>
+            </div>
+          </div>
+          <button class="action-btn" data-copy="083153255281">
+            <svg viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2M8 5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2M9 14l2 2 4-4"/></svg>
+            Copy Nomor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOPAY -->
+    <div class="pay-item">
+      <button class="pay-btn" data-target="hero-gopay">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2v8h18V8H3zm3 2h4v4H6v-4z"/></svg>
+        </div>
+        <div class="info">
+          <span class="name">GoPay</span>
+          <span class="desc">Transfer ke nomor GoPay</span>
+        </div>
+      </button>
+      <div class="pay-hero" id="hero-gopay">
+        <div class="hero-inner">
+          <div class="rekening-nav">
+            <div class="rekening-row">
+              <span class="label">Nama</span>
+              <span class="value">ALI** LUT** ARI***</span>
+            </div>
+            <div class="rekening-row">
+              <span class="label">Nomor</span>
+              <span class="value nomor">087776057332</span>
+            </div>
+          </div>
+          <button class="action-btn" data-copy="087776057332">
+            <svg viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2M8 5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2M9 14l2 2 4-4"/></svg>
+            Copy Nomor
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVO -->
+    <div class="pay-item">
+      <button class="pay-btn" data-target="hero-ovo">
+        <div class="ico">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4H4V6h16v2z"/></svg>
+        </div>
+        <div class="info">
+          <span class="name">OVO</span>
+          <span class="desc">Transfer ke nomor OVO</span>
+        </div>
+      </button>
+      <div class="pay-hero" id="hero-ovo">
+        <div class="hero-inner">
+          <div class="rekening-nav">
+            <div class="rekening-row">
+              <span class="label">Nama</span>
+              <span class="value">ALI** LUT** ARI***</span>
+            </div>
+            <div class="rekening-row">
+              <span class="label">Nomor</span>
+              <span class="value nomor">087776057332</span>
+            </div>
+          </div>
+          <button class="action-btn" data-copy="087776057332">
+            <svg viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2M8 5a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2M9 14l2 2 4-4"/></svg>
+            Copy Nomor
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================
+   1. ANTI ZOOM
+   ============================================ */
+document.addEventListener('wheel', function(e) {
+  if (e.ctrlKey) e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].includes(e.key)) {
+    e.preventDefault();
+    return false;
+  }
+  if (e.ctrlKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) e.preventDefault();
+});
+
+['gesturestart', 'gesturechange', 'gestureend'].forEach(function(evt) {
+  document.addEventListener(evt, function(e) { e.preventDefault(); }, { passive: false });
+});
+
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function(e) {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+
+document.addEventListener('touchmove', function(e) {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+
+
+/* ============================================
+   2. TOGGLE PANEL
+   ============================================ */
+document.querySelectorAll('.pay-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    const targetId = btn.dataset.target;
+    const target = document.getElementById(targetId);
+    const isOpen = target.classList.contains('active');
+
+    document.querySelectorAll('.pay-hero').forEach(function(h) { h.classList.remove('active'); });
+    document.querySelectorAll('.pay-btn').forEach(function(b) { b.classList.remove('active'); });
+
+    if (!isOpen) {
+      btn.classList.add('active');
+      target.classList.add('active');
+      // Kalau support, cek iframe berhasil load atau gak
+      if (targetId === 'hero-support') {
+        checkSupportFrame();
+      }
+    }
+  });
+});
+
+
+/* ============================================
+   3. SUPPORT IFRAME — loading & fallback
+   ============================================ */
+let supportChecked = false;
+function checkSupportFrame() {
+  if (supportChecked) return;
+  supportChecked = true;
+
+  const iframe = document.getElementById('support-frame');
+  const loading = document.getElementById('support-loading');
+  const fallback = document.getElementById('support-fallback');
+
+  // Sembunyikan loading setelah 2 detik (iframe selesai render)
+  const hideLoading = function() {
+    loading.classList.add('hidden');
+  };
+
+  iframe.addEventListener('load', function() {
+    setTimeout(hideLoading, 400);
+
+    // Cek apakah iframe berhasil render konten
+    // Kalau X-Frame-Options blokir, biasanya body kosong / iframe gak bisa diakses
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
+        // Kemungkinan diblokir
+        loading.style.display = 'none';
+        fallback.classList.add('show');
+      }
+    } catch (e) {
+      // Cross-origin — normal, gak bisa diakses. Biarin aja, kemungkinan render OK
+    }
+  });
+
+  iframe.addEventListener('error', function() {
+    loading.style.display = 'none';
+    fallback.classList.add('show');
+  });
+
+  // Timeout: kalau 5 detik masih loading, tampilkan fallback
+  setTimeout(function() {
+    if (!loading.classList.contains('hidden')) {
+      // Cek lagi — kalau masih ada, mungkin diblokir
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
+          loading.style.display = 'none';
+          fallback.classList.add('show');
+        }
+      } catch (e) {
+        // Cross-origin, anggap OK
+        hideLoading();
+      }
+    }
+  }, 5000);
+}
+
+
+/* ============================================
+   4. TOMBOL COPY
+   ============================================ */
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text)
+      .then(function() { return true; })
+      .catch(function() { return fallbackCopy(text); });
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+
+function fallbackCopy(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.width = '1px';
+    ta.style.height = '1px';
+    ta.style.padding = '0';
+    ta.style.border = 'none';
+    ta.style.outline = 'none';
+    ta.style.boxShadow = 'none';
+    ta.style.background = 'transparent';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+
+    if (navigator.userAgent.match(/ipad|iphone/i)) {
+      const range = document.createRange();
+      range.selectNodeContents(ta);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      ta.setSelectionRange(0, 999999);
+    } else {
+      ta.select();
+    }
+
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+document.querySelectorAll('.action-btn[data-copy]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    const nomor = this.dataset.copy;
+    const self = this;
+
+    copyToClipboard(nomor).then(function(success) {
+      const originalHTML = self.innerHTML;
+      if (success) {
+        self.innerHTML = 'Nomor dicopy';
+        self.classList.add('success');
+      } else {
+        window.prompt('Copy nomor ini manual:', nomor);
+      }
+      setTimeout(function() {
+        self.innerHTML = originalHTML;
+        self.classList.remove('success');
+      }, 1800);
+    });
+  });
+});
+
+
+/* ============================================
+   5. TOMBOL DOWNLOAD
+   ============================================ */
+document.getElementById('dl-qris').addEventListener('click', async function() {
+  const img = document.getElementById('qris-img');
+  const btn = this;
+  const originalHTML = btn.innerHTML;
+
+  async function tryFetchDownload() {
+    const res = await fetch(img.src, { mode: 'cors' });
+    if (!res.ok) throw new Error('fetch failed');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'qris-lyppe-payment.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+  }
+
+  function tryAnchorDownload() {
+    const a = document.createElement('a');
+    a.href = img.src;
+    a.download = 'qris-lyppe-payment.png';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  function tryOpenInTab() {
+    window.open(img.src, '_blank');
+  }
+
+  try {
+    await tryFetchDownload();
+    btn.innerHTML = 'Berhasil didownload';
+    btn.classList.add('success');
+  } catch (e1) {
+    try {
+      tryAnchorDownload();
+      btn.innerHTML = 'Menyimpan...';
+      btn.classList.add('success');
+    } catch (e2) {
+      tryOpenInTab();
+      btn.innerHTML = 'Buka gambar & simpan manual';
+      btn.classList.add('success');
+    }
+  }
+
+  setTimeout(function() {
+    btn.innerHTML = originalHTML;
+    btn.classList.remove('success');
+  }, 2200);
+});
+</script>
+</body>
+</html>
