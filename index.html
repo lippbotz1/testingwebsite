@@ -348,19 +348,21 @@
       </button>
       <div class="pay-hero" id="hero-support">
         <div class="hero-inner">
-          <div class="support-native-card" role="status" aria-live="polite">
+          <div class="support-native-card">
             <div class="support-native-icon" aria-hidden="true">♥</div>
-            <h3>Dukung Lyppe langsung di sini</h3>
-            <p>Halaman SociaBuzz menolak ditampilkan di dalam website ini. Supaya kamu tidak dialihkan ke situs lain, gunakan metode pembayaran yang tersedia di halaman ini.</p>
-            <button class="action-btn" type="button" id="support-use-qris">Lanjutkan dengan QRIS</button>
-            <p class="support-native-note">Pembayaran melalui SociaBuzz belum dapat diproses langsung di sini tanpa fitur embed atau API resmi dari SociaBuzz.</p>
+            <h3>Dukung Lyppe melalui SociaBuzz</h3>
+            <p>Tekan tombol di bawah untuk membuka halaman dukungan resmi Lyppe di SociaBuzz.</p>
+            <a class="action-btn support-open-link" href="https://sociabuzz.com/_alippe/support" target="_blank" rel="noopener noreferrer">
+              Buka Halaman Dukungan
+            </a>
+            <p class="support-native-note">Halaman pembayaran SociaBuzz dibuka di tab baru karena situs tersebut tidak mengizinkan checkout ditampilkan melalui iframe.</p>
           </div>
           <style>
             .support-native-card{padding:24px 18px;text-align:center;border:1px solid var(--border);border-radius:16px;background:linear-gradient(145deg,rgba(59,130,246,.12),rgba(17,17,26,.95));}
             .support-native-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 14px;border-radius:16px;background:rgba(59,130,246,.18);color:var(--accent-2);font-size:27px}
             .support-native-card h3{margin:0 0 9px;color:var(--text);font-size:19px}
             .support-native-card p{max-width:480px;margin:0 auto 16px;color:var(--text-dim);font-size:13px;line-height:1.7}
-            .support-native-card .action-btn{max-width:320px;cursor:pointer;border:0}
+            .support-native-card .support-open-link{max-width:320px;cursor:pointer;border:0;text-decoration:none;}
             .support-native-card .support-native-note{margin:15px auto 0;font-size:11px}
           </style>        </div>
       </div>
@@ -575,14 +577,7 @@ document.querySelectorAll('.action-btn[data-copy]').forEach(function(btn) {
   });
 });
 
-/* SUPPORT: stay on this website and open the existing QRIS panel */
-document.getElementById('support-use-qris').addEventListener('click', function() {
-  const qrisButton = document.querySelector('.pay-btn[data-target="hero-qris"]');
-  if (qrisButton) {
-    qrisButton.click();
-    document.getElementById('hero-qris').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-});
+
 
 /* DOWNLOAD */
 document.getElementById('dl-qris').addEventListener('click', async function() {
