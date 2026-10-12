@@ -300,20 +300,35 @@
     box-shadow: 0 4px 16px rgba(34,197,94,0.3);
   }
 
-  /* Support iframe */
+  /* Sociabuzz embedded support */
   .support-frame-wrap {
     border-radius: var(--radius-sm);
     overflow: hidden;
     background: #0e0e14;
+    border: 1px solid var(--border);
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   }
   .support-frame-wrap iframe {
     width: 100%;
-    height: 380px;
+    height: min(720px, 78vh);
+    min-height: 520px;
     border: 0;
     display: block;
     background: #0e0e14;
   }
+  .support-fallback {
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+    margin-top: 12px;
+  }
+  .support-fallback a {
+    color: var(--accent-2);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .support-fallback a:hover { text-decoration: underline; }
 
   @media (max-width: 420px) {
     .wrapper { padding: 30px 14px 40px; }
@@ -323,7 +338,7 @@
     .pay-btn .ico { width: 36px; height: 36px; }
     .hero-inner { padding: 14px; }
     .qr-wrap { max-width: 170px; }
-    .support-frame-wrap iframe { height: 360px; }
+    .support-frame-wrap iframe { height: min(720px, 75vh); min-height: 500px; }
   }
 </style>
 </head>
@@ -365,8 +380,18 @@
       <div class="pay-hero" id="hero-support">
         <div class="hero-inner">
           <div class="support-frame-wrap">
-            <iframe src="support.html" title="Support Siciabuzz" loading="lazy"></iframe>
+            <iframe
+              src="https://sociabuzz.com/_alippe/tribe"
+              title="Halaman Support SociaBuzz TRIBE"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="payment *; clipboard-write"
+            ></iframe>
           </div>
+          <p class="support-fallback">
+            Jika halaman tidak tampil atau pembayaran tidak bisa dilanjutkan di sini,
+            <a href="https://sociabuzz.com/_alippe/tribe" target="_blank" rel="noopener noreferrer">buka SociaBuzz di tab baru</a>.
+          </p>
         </div>
       </div>
     </div>
